@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="">
+	<head>
+		<title>Kehtova guestbook</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		
+		<!-- GRT Youtube Plugin CSS  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <link rel="stylesheet" href="kehto.css">
+		<link href="https://fonts.googleapis.com/css?family=Metal+Mania&display=swap" rel="stylesheet">
+
+	</head>
+	<body>
+    
+
+        
+        <div class="container">
+     
+        <div class="row">
+            <div class="col-xs-6 col-sm-3">
+			
+			    <h1>Kehtova Guestbook</h1>   
+			<br>
+                <form>
+                Name:
+                <br>
+                <input type="text" id="nimi">
+                <br>  <br>
+                Your message:
+                <br>
+                <textarea id="viesti"></textarea>
+                <br>
+                <br>
+                <button onclick="laheta()">Send!</button>
+                </form>
+            </div>
+			<br><br>
+			
+            <div class="col-xs-6 col-sm-3">
+                <h1>Messages</h1>
+				<br>
+                <div id="viestiketju"></div>
+                </div>
+            </div>
+        </div>
+
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase-database.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+		
+		<script>
+		  // Your web app's Firebase configuration
+		  var firebaseConfig = {
+			apiKey: "AIzaSyBgY28RkrepjjBS9oK4jRfB6ult0FzQX1o",
+			authDomain: "digichat-3312f.firebaseapp.com",
+			databaseURL: "https://digichat-3312f.firebaseio.com",
+			projectId: "digichat-3312f",
+			storageBucket: "digichat-3312f.appspot.com",
+			messagingSenderId: "484251509612",
+			appId: "1:484251509612:web:f5264e167f6e6a23d10949"
+		  };
+		  // Initialize Firebase
+		  firebase.initializeApp(firebaseConfig);
+		  
+		  var firebaseRef = firebase.database();
+		  
+		  var fireHeading = document.getElementById("otsikko");
+
+		  var firebaseHeadingRef =
+			firebase.database().ref().child("heading");
+			firebaseHeadingRef.on('value', function(datasnapshot){
+			fireHeading.innerText=datasnapshot.val();
+			});
+			
+			
+			function laheta(){
+            var lahettaja = document.getElementById("nimi").value;
+            var teksti = document.getElementById("viesti").value;
+            var firebaseRef = firebase.database().ref();  
+            //JSON muoto    
+            firebaseRef.child("viestit").push().set({ 
+            nimi: lahettaja, 
+            viesti: teksti 
+            })    
+            }
+		
+		var rootRef = firebase.database().ref().child('viestit');
+			rootRef.on('child_added', snap =>{ 
+		var viesti = snap.child("viesti").val();
+		var nimi = snap.child("nimi").val(); 
+		$("#viestiketju").append("<p><b>" + nimi +"</b>: "+ viesti + "</p>");
+		});
+            
+		  
+		</script>
+
+
+	</body>
+    
+</html>
